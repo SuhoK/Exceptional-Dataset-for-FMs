@@ -8,8 +8,7 @@ import pandas as pd
 import ast
 
 # OpenAI API Key
-#api_key = "sk-proj-153u0Bvf3Y6kLjlRp7zwT3BlbkFJNGDGdA1SRms5DP2IGVCh"
-api_key = "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"
+api_key = "Enter your own api key"
 # Function to encode the image
 def encode_image(image_path):
     with open(image_path, "rb") as image_file:
