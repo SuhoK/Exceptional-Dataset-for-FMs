@@ -21,7 +21,7 @@ def load_images(directory):
 
 # Path to your image directory
 #image_directory = "comics/comics/4_cropped/4_1"
-root_directory = "/Users/suhokang/Desktop/Yonsei/2024SS_Multimodal_Causality/ideation/comics/comics/4_cropped/4_"
+root_directory = "root_directory/4_cropped/4_"
 df = pd.DataFrame(columns=['No.', 'last_directory', 'Accuracy', 'Suffled image list', 'Result'])   
 for num in range(1001, 1101):
     image_directory = root_directory + "%d" % num
@@ -116,6 +116,6 @@ for num in range(1001, 1101):
         # 경로가 존재하지 않으면 아무것도 하지 않음 (오류 없이 넘어감)
         continue
 # 데이터프레임을 CSV 파일로 저장
-df.to_csv('/Users/suhokang/Desktop/Yonsei/2024SS_Multimodal_Causality/ideation/code_test/0528/1001-1100_Zero-Shot.csv', index=False)
+df.to_csv('csv/1001-1100_Zero-Shot.csv', index=False)
 
 print("CSV 파일이 저장되었습니다.")
