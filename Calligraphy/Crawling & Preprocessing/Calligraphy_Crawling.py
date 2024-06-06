@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[20]:
-
-
 import selenium 
 import sys
 import pandas as pd
@@ -57,18 +51,15 @@ options.binary_location = "C:/Program Files/Google/Chrome/Application/chrome.exe
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 driver.implicitly_wait(3)
 
-# url에 접근한다.
 driver.get('https://www.pinterest.com/')
 driver.implicitly_wait(3)
 time.sleep(5)
 
 
-# 경로와 검색어 설정
 imagedir = 'images'
-url_file_path = os.path.join(imagedir, "URLs.txt")  # URL을 저장할 파일 경로
+url_file_path = os.path.join(imagedir, "URLs.txt")  
 
 login()
-# 검색어 입력하기
 input_search_keyword = driver.find_element(By.CSS_SELECTOR,'#searchBoxContainer > div > div > div.ujU.zI7.iyn.Hsu > input[type=text]')
 for _ in range(100):
     input_search_keyword.send_keys(Keys.BACKSPACE)
@@ -85,16 +76,15 @@ print('Searching word (' + search_word + ')')
 try:
     os.makedirs(imagedir, exist_ok=True)
     os.makedirs(os.path.join(imagedir, search_word), exist_ok=True)
-    with open(url_file_path, "w") as f:  # URL 파일 초기화
+    with open(url_file_path, "w") as f:  
         pass
 except Exception as e:
     print(f"Directory creation failed: {e}")
 
 links_saved = set()
 force_scroll_down = 0
-target_num_images = 1000  # 목표 이미지 수
+target_num_images = 1000  
 
-# 이미지와 URL 크롤링
 while len(links_saved) < target_num_images:
     images = WebDriverWait(driver, 10).until(
         EC.presence_of_all_elements_located((By.XPATH, "//img[@srcset]"))
@@ -121,10 +111,10 @@ while len(links_saved) < target_num_images:
     print(str(len(links_saved)) + ' / ' + str(target_num_images))
     
     if count_new_images == 0:
-        if force_scroll_down < 800:  # 스크롤 다운 횟수 증가
+        if force_scroll_down < 800:  
             driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
             force_scroll_down += 1
-            time.sleep(5)  # 로드 대기 시간 증가
+            time.sleep(5)  
             driver.implicitly_wait(4)
         else:
             print('Force break due to no new images')
@@ -138,14 +128,6 @@ while len(links_saved) < target_num_images:
 
 print(f'Total images saved: {len(links_saved)}')
 
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
 
 
 def find_and_save_images():
