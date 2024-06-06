@@ -1,5 +1,5 @@
 !pip install pandas torchmetrics
-
+from torchmetrics.text import WordErrorRate
 import pandas as pd
 import re
 
