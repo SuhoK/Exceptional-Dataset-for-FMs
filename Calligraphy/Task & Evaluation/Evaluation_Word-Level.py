@@ -1,3 +1,5 @@
+!pip install pandas torchmetrics
+
 import pandas as pd
 import re
 
@@ -32,16 +34,19 @@ def accuracy(pred, target):
     total = len(target)
     return correct / total if total > 0 else 0
 
-# csv file with predicted sentences and ground truth
-pred_csv = pd.read_csv("/gpt_cot.csv")
-gt_csv = pd.read_csv("/label_ocr.csv")
-merged_df = pd.merge(pred_csv, gt_csv, on='filename', suffixes=('_pred', '_gt'))
-pred_li = merged_df['content_pred'].apply(clean_text).tolist()
-gt_li = merged_df['content_gt'].apply(clean_text).tolist()
-accuracies = [accuracy(p.split(), t.split()) for p, t in zip(pred_li, gt_li)]
 
-# Calculate
-prec = precision(pred_li, gt_li)
-rec = recall(pred_li, gt_li)
-f1 = f1_score(prec, rec)
-acc = sum(accuracies) / len(accuracies)
+def calculate_wer_from_csv(preds_csv_path, target_csv_path, preds_column='content', target_column='content'):
+    preds_df = pd.read_csv(preds_csv_path)
+    target_df = pd.read_csv(target_csv_path)
+
+    merged_df = pd.merge(preds_df, target_df, on='filename', suffixes=('_pred', '_target'))
+    preds = merged_df[preds_column + '_pred'].tolist()
+    targets = merged_df[target_column + '_target'].tolist()
+
+    wer = WordErrorRate()
+    wer_score = wer(preds, targets).item() 
+
+    return wer_score
+
+
+
