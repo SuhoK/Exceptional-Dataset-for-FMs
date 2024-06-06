@@ -49,20 +49,6 @@ def perform_ocr_on_directory(directory_path, output_file):
         json.dump(results, f, indent=4, ensure_ascii=False)
 
 
-
-# JSON 파일과 이미지 경로 설정
-json_path = r"C:\Users\user\Desktop\lab\paper\ocr_result.json"
-image_dir = r"C:\Users\user\Desktop\lab\paper\confound"
-output_dir = r"C:\Users\user\Desktop\lab\paper\output"
-
-# 바운딩 박스 패딩 (픽셀 단위)
-padding = 10
-
-# JSON 파일 로드
-with open(json_path, 'r', encoding='utf-8') as f:
-    data = json.load(f)
-
-
 def get_padded_bbox(vertices, padding, img_width, img_height):
     min_x = min(vertex['x'] for vertex in vertices)
     min_y = min(vertex['y'] for vertex in vertices)
@@ -77,6 +63,8 @@ def get_padded_bbox(vertices, padding, img_width, img_height):
     return (min_x, min_y, max_x, max_y)
 
 def cropped(json_path,image_dir,output_dir)
+    with open(json_path, 'r', encoding='utf-8') as f:
+        data = json.load(f)
     for image_name, image_data in data.items():
         image_path = os.path.join(image_dir, image_name)
         img_array = np.fromfile(image_path, np.uint8)
