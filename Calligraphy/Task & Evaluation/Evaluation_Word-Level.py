@@ -35,16 +35,16 @@ def accuracy(pred, target):
     return correct / total if total > 0 else 0
 
 
-def calculate_wer_from_csv(preds_csv_path, target_csv_path, preds_column='content', target_column='content'):
+def calculate_wer_from_csv(preds_csv_path, gt_csv_path):
     preds_df = pd.read_csv(preds_csv_path)
-    target_df = pd.read_csv(target_csv_path)
+    target_df = pd.read_csv(gt_csv_path)
 
     merged_df = pd.merge(preds_df, target_df, on='filename', suffixes=('_pred', '_target'))
     preds = merged_df[preds_column + '_pred'].tolist()
-    targets = merged_df[target_column + '_target'].tolist()
+    gt = merged_df[target_column + '_gt'].tolist()
 
     wer = WordErrorRate()
-    wer_score = wer(preds, targets).item() 
+    wer_score = wer(preds, gt).item() 
 
     return wer_score
 
