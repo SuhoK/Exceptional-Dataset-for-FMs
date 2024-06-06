@@ -28,7 +28,7 @@ def recall_precision_f1("predicted.csv"):
         
         return pd.Series([recall, precision,f1])
 
-def calculate_cer_from_csv(preds_csv_path, gt_csv_path):
+def cer(preds_csv_path, gt_csv_path):
     # CSV 파일 읽기
     preds_df = pd.read_csv(preds_csv_path)
     gt_df = pd.read_csv(target_csv_path)
