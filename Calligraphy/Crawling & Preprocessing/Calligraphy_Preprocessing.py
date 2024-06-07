@@ -14,8 +14,14 @@ import numpy as np
 from IPython.display import display
 import cv2
 
+#For Character-Level Evaluation
 def remove_special_characters(text):
     return re.sub(r'[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9]', '', text)
+
+#For Word-Level Evaluation
+def clean_text(text):
+    text = re.sub(r'\n', ' ', text)
+    text = re.sub(r'[^\w\s]', '', text)
 
 def perform_ocr_on_directory(directory_path, output_file):
     api_key = "Enter yout upstage key"
