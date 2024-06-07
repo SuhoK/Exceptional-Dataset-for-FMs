@@ -57,13 +57,13 @@ def save_article_contents(urls):
             article.parse()
             
             # 기사 제목, URL, 내용을 리스트에 추가
-            data.append([article.title, url, article.text])
+            data.append([article.title, url, article.text,article.publish_date])
             time.sleep(2)
         except Exception as e:
             print(f"Error processing article from {url}: {e}")
     
     # DataFrame 생성
-    df = pd.DataFrame(data, columns=["Title", "URL", "Content"])
+    df = pd.DataFrame(data, columns=["Title", "URL", "Content","Date"])
     return df
 
 # 기사 내용을 DataFrame으로 저장
