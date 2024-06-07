@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Wed Apr 17 11:46:57 2024
 
-@author: SubeenPark
-"""
 
 import time
 from selenium import webdriver
