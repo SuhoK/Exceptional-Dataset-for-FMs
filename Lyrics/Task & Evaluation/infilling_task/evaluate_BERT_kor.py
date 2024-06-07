@@ -75,8 +75,7 @@ def evaluate_using_rouge(text, predicted_text):
     model_score = rouge.score(text, predicted_text)
     return model_score
 
-
-if __name__ == '__main__':
+def evaluate_BERT_kor():
     file_names = get_file_names('./final_dataset/korean_masking_task_2024')
 
     tokenizer = BertTokenizer.from_pretrained('bert-base-multilingual-cased')
@@ -113,5 +112,5 @@ if __name__ == '__main__':
 
             print(file_name)
             write_file(f'{dir_name}/bert_predict_scores.txt', f'{rouge_score}\n{cosine_similarity_score}')
-    # print(score_list)
-    # print(total_score/len(file_names))
+if __name__ == '__main__':
+    pass

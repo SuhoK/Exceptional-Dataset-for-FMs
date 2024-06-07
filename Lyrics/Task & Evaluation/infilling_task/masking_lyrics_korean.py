@@ -50,8 +50,7 @@ def masking_words(text):
 
     return selection, after_masking.replace(' \n', '\n')
 
-if __name__ == '__main__':
-    # korean_songs_all_with_genre_lyrics_description.csv file에서 Lyrics만 추출
+def mask_all():
     path_korean_songs = './final_dataset/melon_chart_combined_2024.csv'
     df = pd.read_csv(path_korean_songs)
 
@@ -85,3 +84,8 @@ if __name__ == '__main__':
 
     with open('./final_dataset/korean_masking_task_2024/list_for_gpt.txt', 'w') as f:
         f.write(text)
+
+
+if __name__ == '__main__':
+    # korean_songs_all_with_genre_lyrics_description.csv file에서 Lyrics만 추출
+    pass
