@@ -55,13 +55,13 @@ def save_article_contents(urls):
             article.parse()
             
             
-            data.append([article.title, url, article.text])
+            data.append([article.title, url, article.text,article.publish_date])
             time.sleep(2)
         except Exception as e:
             print(f"Error processing article from {url}: {e}")
     
     
-    df = pd.DataFrame(data, columns=["Title", "URL", "Content"])
+    df = pd.DataFrame(data, columns=["Title", "URL", "Content","Date"])
     return df
 
 
