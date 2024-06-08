@@ -28,7 +28,7 @@ def encode_image(image_path):
 prompt="Step1: Identify the start and end of the sentence. Check if there are any line breaks in the middle of the sentence. \n\n Step2: Split into words and translate each word in english and identify any typos based on the context. \n\n Step3: Correct the typos by comparing each word with similar words and combine the corrected words to form a coherent sentence \n\nStep4: Combine based on context: \n\n Step5: Analyze the context to infer the meaning of the handwriting. Correct any misrecognized words by comparing them with similar words and choosing the correct one. \nInfer the context: The sentence talks about the nostalgic feeling of afternoon sunlight in a moment where old age is forgotten. \n\n Step6: Perform grammar and spelling checks to verify the recognized sentence. Ensure that the sentence flows naturally and makes sense. Check grammar and spelling."
 def gpt_api_cot(image_path):
 
-    # base64 문자열 얻기
+
     base64_image = encode_image(image_path)
 
     headers = {
@@ -86,5 +86,4 @@ def gpt_api_cot(image_path):
     except requests.RequestException as e:
         print(f"Request error for {image_path}: {e}")
         return None
-    # 응답 출력
     return content
