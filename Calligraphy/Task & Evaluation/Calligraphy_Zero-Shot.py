@@ -25,7 +25,6 @@ def encode_image(image_path):
 
 def gpt_api_zero(image_path):
 
-    # base64 문자열 얻기
     base64_image = encode_image(image_path)
 
     headers = {
