@@ -5,8 +5,9 @@ from bert_score import BERTScorer
 from rouge import Rouge
 from rouge_score import rouge_scorer as eng_rouge_scorer
 from korouge_score import rouge_scorer
-from transformers import BertTokenizer, BertForMaskedLM, BertConfig
+from transformers import BertTokenizer, BertForMaskedLM, BertConfig, BertModel
 from sklearn.metrics.pairwise import cosine_similarity
+from KoBERTScore.KoBERTScore.score import bert_score
 
 # read file
 def read_csv(file_dir):
@@ -101,6 +102,41 @@ def calculate_bert_score(original, generated, scorer):
     # return the average bert score
     return [(sum(bert_scores_P) / len(bert_scores_P)).tolist()[0], (sum(bert_scores_R) / len(bert_scores_R)).tolist()[0], (sum(bert_scores_F1) / len(bert_scores_F1)).tolist()[0]]
 
+def calculate_bert_score_kor(tokenizer, model, original, generated):
+    """
+        Calculate the BERT score
+        First, chunk the data into 5 chunks
+        Second, calculate the BERT score for each chunk
+        Third, calculate the average BERT score for all chunks
+    """
+    # chunk the data into 5 chunks
+    generated = generated.replace('Filled lyrics: ', '')
+
+    chunk_size_original = len(original) // 5
+    chunk_size_generated = len(generated) // 5
+
+    chunks_original = [original[i:i+chunk_size_original] for i in range(0, len(original), chunk_size_original)]
+    chunks_generated = [generated[i:i+chunk_size_generated] for i in range(0, len(generated), chunk_size_generated)]
+
+    # calculate bert score for each chunk
+    # bert_score_masked = score_from_all_layers(tokenizer, model, [row['Original']], [row['Masked']])
+
+    # R, P, F1 = score_from_all_layers(tokenizer, model, chunks_original, chunks_generated)
+    bert_scores_P = []
+    bert_scores_R = []
+    bert_scores_F1 = []
+    for i in range(5):
+        R, P, F1 = bert_score(tokenizer, model, [chunks_original[i]], [chunks_generated[i]])
+        print(R)
+        print(P)
+        print(F1)
+    bert_scores_P.append(P)
+    bert_scores_R.append(R)
+    bert_scores_F1.append(F1)
+    
+    # return the average bert score
+    return [(sum(bert_scores_P) / len(bert_scores_P)).tolist()[0], (sum(bert_scores_R) / len(bert_scores_R)).tolist()[0], (sum(bert_scores_F1) / len(bert_scores_F1)).tolist()[0]]
+
 def evaluate_gpt_eng(dataset_dir: str = './final_dataset/English_masking_task_words', 
                      write_csv_file: str = './final_dataset/ENG_evaluation_results.csv'):
     tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
@@ -153,20 +189,14 @@ def evaluate_gpt_kor(dataset_dir: str = './final_dataset/Korean_masking_task_wor
                      write_csv_file: str = './final_dataset/KOR_evaluation_results.csv'):
 
     tokenizer = BertTokenizer.from_pretrained('bert-base-multilingual-cased')
-    model = BertForMaskedLM.from_pretrained('bert-base-multilingual-cased')
-
-    config = BertConfig.from_pretrained('bert-base-multilingual-cased', output_hidden_states=True)
-    model = BertForMaskedLM.from_pretrained('bert-base-multilingual-cased', config=config)
+    model = BertModel.from_pretrained('bert-base-multilingual-cased')
 
     file_dir = f'{dataset_dir}'
     results_of_2024 = read_results(file_dir)
 
-    print(file_dir)
-
     scores = []
     for row in results_of_2024:
         print(f'name: {row['Title']}')
-        row['Original'] = read_lyrics(dataset_dir, row['Title'])
 
         # evaluate the results
         # calculate the Rouge score
@@ -175,17 +205,21 @@ def evaluate_gpt_kor(dataset_dir: str = './final_dataset/Korean_masking_task_wor
         rouge_score_cot_few_shot = calculate_rouge_ko(row['Original'], row['COT_few-shot'])
 
         # calculate cosine similarity
-        scores_zero_shot = evaluate_using_cosine_similarity(row['Original'], row['Zero-shot'], model, tokenizer)
-        scores_cot = evaluate_using_cosine_similarity(row['Original'], row['COT'], model, tokenizer)
-        scores_cot_few_shot = evaluate_using_cosine_similarity(row['Original'], row['COT_few-shot'], model, tokenizer)
+        bert_score_zero_shot = calculate_bert_score_kor(tokenizer, model, row['Original'], row['Zero-shot'])
+        bert_score_cot = calculate_bert_score_kor(tokenizer, model, row['Original'], row['COT'])
+        bert_score_cot_few_shot = calculate_bert_score_kor(tokenizer, model, row['Original'], row['COT_few-shot'])
 
         scores.append({'Title': row['Title'], 'Rouge_zero-shot': round(rouge_score_zero_shot[0], 4), 'Rouge_COT': round(rouge_score_cot[0], 4), 'Rouge_COT_few-shot': round(rouge_score_cot_few_shot[0], 4), 
                     'Rouge_L_zero-shot': round(rouge_score_zero_shot[1], 4), 'Rouge_L_COT': round(rouge_score_cot[1], 4), 'Rouge_L_COT_few-shot': round(rouge_score_cot_few_shot[1], 4),
-                    'Cosine_similarity_zero-shot': round(scores_zero_shot[0][0], 4), 'Cosine_similarity_COT': round(scores_cot[0][0], 4), 'Cosine_similarity_COT_few-shot': round(scores_cot_few_shot[0][0], 4)
+                    'BERT_P_zero-shot': round(bert_score_zero_shot[0], 4), 'BERT_P_COT': round(bert_score_cot[0], 4), 'BERT_P_COT_few-shot': round(bert_score_cot_few_shot[0], 4),
+                    'BERT_R_zero-shot': round(bert_score_zero_shot[1], 4), 'BERT_R_COT': round(bert_score_cot[1], 4), 'BERT_R_COT_few-shot': round(bert_score_cot_few_shot[1], 4),
+                    'BERT_F1_zero-shot': round(bert_score_zero_shot[2], 4), 'BERT_F1_COT': round(bert_score_cot[2], 4), 'BERT_F1_COT_few-shot': round(bert_score_cot_few_shot[2], 4)
                    })
     fieldnames = ['Title', 'Rouge_zero-shot', 'Rouge_COT', 'Rouge_COT_few-shot', 
                   'Rouge_L_zero-shot', 'Rouge_L_COT', 'Rouge_L_COT_few-shot', 
-                  'Cosine_similarity_zero-shot', 'Cosine_similarity_COT', 'Cosine_similarity_COT_few-shot'
+                  'BERT_P_zero-shot', 'BERT_P_COT', 'BERT_P_COT_few-shot', 
+                  'BERT_R_zero-shot', 'BERT_R_COT', 'BERT_R_COT_few-shot', 
+                  'BERT_F1_zero-shot', 'BERT_F1_COT', 'BERT_F1_COT_few-shot'
                   ]
 
     with open(write_csv_file, 'w', encoding='utf-8', newline='') as f:
