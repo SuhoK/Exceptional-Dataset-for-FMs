@@ -68,7 +68,7 @@ def get_padded_bbox(vertices, padding, img_width, img_height):
     
     return (min_x, min_y, max_x, max_y)
 
-def cropped(json_path,image_dir,output_dir)
+def cropped(json_path,image_dir,output_dir):
     with open(json_path, 'r', encoding='utf-8') as f:
         data = json.load(f)
     for image_name, image_data in data.items():
