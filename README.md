@@ -4,4 +4,4 @@ We have developed an unprecedented dataset that transcends conventional commonse
 
 In this page, we provides all source code utilized in constructing the dataset for this paper, encompassing everything from data scraping to preprocessing. Please understand that due to copyright concerns, direct provision of the dataset used in this paper is not feasible.
 
-*** PLEASE DOWNLOAD TO CHECK FILE!!! ***
+*** PLEASE DOWNLOAD REPOSITORY TO CHECK FILE!!! ***
