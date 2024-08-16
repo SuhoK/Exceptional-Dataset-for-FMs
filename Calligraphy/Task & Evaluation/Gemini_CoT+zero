@@ -1,0 +1,31 @@
+import os
+import random
+import base64
+import json
+import re
+import pandas as pd
+import ast
+import google.generativeai as genai
+from google.api_core import client_options as client_options_lib
+from PIL import Image
+import io
+import csv
+
+def gemini_cot(image_path):
+    image = image_encoding(image_path)
+    prompt = "The image uploaded is Korean calligraphy with illustration.\n Transcribe the letters in the uploaded image. Solve it with following steps. \n1. Identify the start and end of the sentence. Check if there are any line breaks in the middle of the sentence.\n2. Split the recognized text into individual words. Combine the split words based on the context to form a coherent sentence.\n3. Analyze the context to infer the meaning of the handwriting. Correct any misrecognized words by comparing them with similar words and choosing the correct one.\n4. Perform grammar and spelling checks to verify the recognized sentence. Ensure that the sentence flows naturally and makes sense \n Don't describe your steps. Just answer the result of the OCR without translating"
+    combined_input = [prompt, image]
+    
+    response = model.generate_content(combined_input)
+    try:
+        content= response.text 
+    except:
+        candidate = response.candidates[0]
+        finish_reason = candidate.finish_reason
+        print(finish_reason)
+        content = None
+    
+    response = response.to_dict()
+    print(content)
+    
+    return response, content
