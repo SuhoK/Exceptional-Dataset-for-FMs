@@ -1,15 +1,26 @@
 import os
-import random
-import base64
-import json
-import re
-import pandas as pd
-import ast
-import google.generativeai as genai
-from google.api_core import client_options as client_options_lib
+import openai
+import requests
 from PIL import Image
-import io
+from io import BytesIO
+import matplotlib.pyplot as plt
+import base64
+import requests
+import re
+import ctypes
+from ctypes import wintypes
+import json
+import pandas as pd
+import numpy as np
+from IPython.display import display
 import csv
+
+
+api_key = "Enter your API Key"
+
+def encode_image(image_path):
+    with open(image_path, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode('utf-8')
 
 def gemini_cot(image_path):
     image = image_encoding(image_path)
