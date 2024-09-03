@@ -4,7 +4,6 @@ from rouge import Rouge
 from korouge_score import rouge_scorer
 from transformers import BertTokenizer, BertForMaskedLM, BertConfig
 from sklearn.metrics.pairwise import cosine_similarity
-from LMkor.examples.mask_prediction import predict
 
 def get_embeddings(text_list, tokenizer, model):
     inputs = tokenizer(text_list, return_tensors='pt', padding=True, truncation=True)

@@ -1,7 +1,8 @@
-from masking_lyrics_korean import mask_all
-from evaluate_BERT_kor import evaluate_BERT_kor
-from get_list_for_gpt import get_list_for_gpt
-from get_response_gpt import get_response_kor
+from infilling_preprocess.masking_lyrics_korean import mask_all
+from infilling_preprocess.evaluate_BERT_kor import evaluate_BERT_kor
+from infilling_preprocess.get_list_for_gpt import get_list_for_gpt
+
+from infilling_get_response_gpt import get_response_kor
 from evaluate_gpt import evaluate_gpt_kor
 
 if __name__ == '__main__':

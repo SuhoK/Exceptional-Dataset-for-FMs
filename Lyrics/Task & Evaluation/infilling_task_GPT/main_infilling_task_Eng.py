@@ -1,9 +1,9 @@
-# from write_paper_BERT_evaluate import evaluate_infilling_tasks_ENG
-from divide_lyrics import divide_lyrics
-from masking_lyrics_english import mask_all
-from evaluate_BERT_eng import evaluate_bert_eng
-from get_list_for_gpt import get_list_for_gpt
-from get_response_gpt import get_response_eng
+from infilling_preprocess.divide_lyrics import divide_lyrics
+from infilling_preprocess.masking_lyrics_english import mask_all
+from infilling_preprocess.evaluate_BERT_eng import evaluate_bert_eng
+from infilling_preprocess.get_list_for_gpt import get_list_for_gpt
+
+from infilling_get_response_gpt import get_response_eng
 from evaluate_gpt import evaluate_gpt_eng
 
 if __name__ == '__main__':
